@@ -29,6 +29,13 @@
         </cm:default-properties>
     </cm:property-placeholder>
 
+    <reference id="platformTxManager" interface="org.springframework.transaction.PlatformTransactionManager" availability="mandatory"/>
+
+    <bean id="PROPAGATION_REQUIRED" class="org.apache.camel.spring.spi.SpringTransactionPolicy">
+        <property name="transactionManager" ref="platformTxManager" />
+        <property name="propagationBehaviorName" value="PROPAGATION_REQUIRED" />
+    </bean>
+
     <bean id="mysqlDatasource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
         <property name="driverClassName" value="${database.driverClassName}"/>
         <property name="url" value="${database.url}"/>
@@ -72,6 +79,7 @@
 
         <route id="transferMoney">
             <from uri="jetty://{{base.rest.url}}{{transferMoney.uri}}"/>
+            <transacted ref="PROPAGATION_REQUIRED"/>
             <convertBodyTo type="java.lang.String" charset="UTF-8"/>
             <log message="transferMoney for ${body}"/>
             <unmarshal ref="xmljsonWithOptions"/>
@@ -94,8 +102,25 @@
                 </simple>
             </setBody>
             <to uri="jdbc:mysqlDatasource"/>
-            <setBody>
+            <setHeader headerName="TRANSACTIONSCamelGeneratedKeysRows">
                 <simple>${header.CamelGeneratedKeysRows}</simple>
+            </setHeader>
+            <setBody>
+                <simple>
+                    UPDATE ACCOUNTS SET amount = (amount - ${header.amount}) WHERE customerid = ${header.fromId}
+                </simple>
+            </setBody>
+            <to uri="jdbc:mysqlDatasource"/>
+            <log message="UPDATE FROM: ${header.CamelJdbcUpdateCount}"/>
+            <setBody>
+                <simple>
+                    UPDATE ACCOUNTS SET amount = (amount + ${header.amount}) WHERE customerid = ${header.toId}
+                </simple>
+            </setBody>
+            <to uri="jdbc:mysqlDatasource"/>
+            <log message="UPDATE TO: ${header.CamelJdbcUpdateCount}"/>
+            <setBody>
+                <simple>${header.TRANSACTIONSCamelGeneratedKeysRows}</simple>
             </setBody>
         </route>
 
