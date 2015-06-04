@@ -85,13 +85,18 @@
                 <xpath resultType="java.lang.String">/transfer/amount/text()</xpath>
             </setHeader>
             <log message="${header.fromId} => ${header.toId} == ${header.amount}"/>
+            <setHeader headerName="CamelRetrieveGeneratedKeys">
+                <constant>true</constant>
+            </setHeader>
             <setBody>
                 <simple>
-                    INSERT INTO TRANSACTIONS (fromid, toid, amount) VALUE (${header.fromId}, ${header.toId}, ${header.amount});
-                    SELECT LAST_INSERT_ID();
+                    INSERT INTO TRANSACTIONS (fromid, toid, amount) VALUE (${header.fromId}, ${header.toId}, ${header.amount})
                 </simple>
             </setBody>
             <to uri="jdbc:mysqlDatasource"/>
+            <setBody>
+                <simple>${header.CamelGeneratedKeysRows}</simple>
+            </setBody>
         </route>
 
     </camelContext>
