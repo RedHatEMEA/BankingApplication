@@ -2,13 +2,13 @@
 Used for the RBS Techstock demo, if once complete is still totally generic, will be converted to public
 
 #DB Schema (See sql folder)
-Table: Customer
+Table: Customer 
 Columns: Id, FirstName, Surname, Address
 
-Table: Account
+Table: Account 
 Columns: Id, CustomerId, Balance
 
-Table: Transactions
+Table: Transactions 
 Columns: Id, FromId, ToId, Amount
 
 #REST
