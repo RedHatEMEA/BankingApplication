@@ -33,5 +33,6 @@ Columns: Id, FromId, ToId, Amount
 #Install into Fuse
 * features:addurl mvn:com.redhat/techstock-features/1.0.0-SNAPSHOT/xml/features
 * features:install com.redhat-customer-services
+* route-list
 
 

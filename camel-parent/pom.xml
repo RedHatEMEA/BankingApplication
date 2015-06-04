@@ -23,7 +23,6 @@
         <activemq-version>5.9.0.redhat-610379</activemq-version>
         <karaf-version>2.3.0.redhat-610379</karaf-version>
         <fabric8-version>1.0.0.redhat-379</fabric8-version>
-        <aries-blueprint-version>1.0.1.redhat-610379</aries-blueprint-version>
 
         <!-- BOM -->
         <jboss-fuse-bom-version>${fuse-version}</jboss-fuse-bom-version>
@@ -31,11 +30,6 @@
         <!-- Database -->
         <commons-dbcp-version>1.4_3</commons-dbcp-version>
         <mysql-version>5.1.35</mysql-version>
-
-        <!-- Commons -->
-        <commons-lang3-version>3.3.2</commons-lang3-version>
-        <commons-io-version>2.4</commons-io-version>
-        <joda-time-version>2.5</joda-time-version>
 
         <!-- Testing -->
         <junit-version>4.12</junit-version>
@@ -91,26 +85,6 @@
                 <scope>provided</scope>
             </dependency>
 
-            <!-- Commons -->
-            <dependency>
-                <groupId>org.apache.commons</groupId>
-                <artifactId>commons-lang3</artifactId>
-                <version>${commons-lang3-version}</version>
-                <scope>provided</scope>
-            </dependency>
-            <dependency>
-                <groupId>commons-io</groupId>
-                <artifactId>commons-io</artifactId>
-                <version>${commons-io-version}</version>
-                <scope>provided</scope>
-            </dependency>
-            <dependency>
-                <groupId>joda-time</groupId>
-                <artifactId>joda-time</artifactId>
-                <version>${joda-time-version}</version>
-                <scope>provided</scope>
-            </dependency>
-
             <!-- Testing -->
             <dependency>
                 <groupId>junit</groupId>
@@ -154,20 +128,6 @@
         <dependency>
             <groupId>org.osgi</groupId>
             <artifactId>org.osgi.compendium</artifactId>
-        </dependency>
-
-        <!-- Commons -->
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-lang3</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>commons-io</groupId>
-            <artifactId>commons-io</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>joda-time</groupId>
-            <artifactId>joda-time</artifactId>
         </dependency>
 
         <!-- Testing: Used to resolve blueprint namespaces -->

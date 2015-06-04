@@ -22,3 +22,5 @@ logs/
 tmp/
 *.tmp
 
+_error
+
