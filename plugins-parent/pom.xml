@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.redhat</groupId>
+        <artifactId>techstock-demo</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+        <relativePath>../</relativePath>
+    </parent>
+    <artifactId>plugins-parent</artifactId>
+    <packaging>pom</packaging>
+    <name>${project.artifactId}</name>
+
+    <properties>
+        <!-- Plugin versions -->
+        <maven-bundle-plugin-version>2.3.4</maven-bundle-plugin-version>
+        <maven-source-plugin-version>2.1.1</maven-source-plugin-version>
+        <maven-compiler-plugin-version>2.3.2</maven-compiler-plugin-version>
+        <maven-surefire-plugin-version>2.18.1</maven-surefire-plugin-version>
+        <depends-maven-plugin-version>1.2</depends-maven-plugin-version>
+        <maven-resources-plugin-version>2.6</maven-resources-plugin-version>
+        <build-helper-maven-plugin-version>1.7</build-helper-maven-plugin-version>
+    </properties>
+
+    <!-- Build plugins -->
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <!-- http://maven.apache.org/plugins/maven-compiler-plugin/ -->
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>${maven-compiler-plugin-version}</version>
+                </plugin>
+                <plugin>
+                    <!-- http://maven.apache.org/plugins/maven-resources-plugin/ -->
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-resources-plugin</artifactId>
+                    <version>${maven-resources-plugin-version}</version>
+                </plugin>
+                <plugin>
+                    <!-- http://maven.apache.org/plugins/maven-source-plugin/ -->
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-source-plugin</artifactId>
+                    <version>${maven-source-plugin-version}</version>
+                </plugin>
+                <plugin>
+                    <!-- http://mojo.codehaus.org/build-helper-maven-plugin/ -->
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>build-helper-maven-plugin</artifactId>
+                    <version>${build-helper-maven-plugin-version}</version>
+                </plugin>
+                <plugin>
+                    <!-- http://maven.apache.org/surefire/maven-surefire-plugin -->
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <version>${maven-surefire-plugin-version}</version>
+                </plugin>
+                <plugin>
+                    <!-- http://mojo.codehaus.org/exec-maven-plugin/ -->
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>exec-maven-plugin</artifactId>
+                    <version>${exec-maven-plugin-version}</version>
+                </plugin>
+                <plugin>
+                    <!-- https://www.eclipse.org/m2e/documentation/m2e-execution-not-covered.html -->
+                    <groupId>org.eclipse.m2e</groupId>
+                    <artifactId>lifecycle-mapping</artifactId>
+                    <version>1.0.0</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+
+        <plugins>
+            <!-- General plugins which make the JARs -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>${java-runtime}</source>
+                    <target>${java-runtime}</target>
+                    <encoding>${project.build.sourceEncoding}</encoding>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <configuration>
+                    <encoding>${project.build.sourceEncoding}</encoding>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!-- Testing plugins -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
+</project>

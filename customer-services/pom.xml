@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.redhat</groupId>
+        <artifactId>camel-parent</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+        <relativePath>../camel-parent</relativePath>
+    </parent>
+    <artifactId>customer-services</artifactId>
+    <packaging>bundle</packaging>
+    <name>${project.artifactId}</name>
+
+    <properties>
+        <build.osgi.import.before.defaults>
+            com.mysql.jdbc
+        </build.osgi.import.before.defaults>
+        <build.osgi.export.pkg>com.redhat.techstock.customerservices.*</build.osgi.export.pkg>
+        <build.osgi.export.service/>
+        <build.osgi.activator/>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-jetty</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-jdbc</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-xmljson</artifactId>
+        </dependency>
+
+        <!-- And also XOM must be included. XOM cannot be included by default due to an incompatible
+        license with ASF; so add this manually -->
+        <dependency>
+            <groupId>xom</groupId>
+            <artifactId>xom</artifactId>
+            <version>1.2.5</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- Database -->
+        <dependency>
+            <groupId>org.apache.servicemix.bundles</groupId>
+            <artifactId>org.apache.servicemix.bundles.commons-dbcp</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+        </dependency>
+    </dependencies>
+
+</project>

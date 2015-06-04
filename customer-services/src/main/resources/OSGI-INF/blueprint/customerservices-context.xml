@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<blueprint xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+           xmlns:cm="http://aries.apache.org/blueprint/xmlns/blueprint-cm/v1.1.0"
+           xsi:schemaLocation="
+       http://www.osgi.org/xmlns/blueprint/v1.0.0 http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd
+       http://camel.apache.org/schema/blueprint http://camel.apache.org/schema/blueprint/camel-blueprint.xsd
+       http://aries.apache.org/blueprint/xmlns/blueprint-cm/v1.1.0 http://aries.apache.org/schemas/blueprint-cm/blueprint-cm-1.1.0.xsd">
+
+    <cm:property-placeholder persistent-id="com.creditsuisse.fuse.project1" update-strategy="reload">
+        <cm:default-properties>
+            <!-- REST -->
+            <cm:property name="base.rest.url" value="http://0.0.0.0:9001"/>
+            <cm:property name="getCustomers.uri" value="/fuse/techstock/getcustomers?matchOnUriPrefix=true"/>
+            <cm:property name="getBalance.uri" value="/fuse/techstock/getbalance?matchOnUriPrefix=true"/>
+            <cm:property name="transferMoney.uri" value="/fuse/techstock/transfermoney"/>
+
+            <!-- Database -->
+            <cm:property name="database.driverClassName" value="com.mysql.jdbc.Driver"/>
+            <cm:property name="database.url" value="jdbc:mysql://localhost:3306/techstock?autoReconnect=true"/>
+            <cm:property name="database.user" value="gareth"/>
+            <cm:property name="database.password" value="healy"/>
+            <cm:property name="database.initialSize" value="4"/>
+            <cm:property name="database.maxActive" value="32"/>
+            <cm:property name="database.minIdle" value="4"/>
+            <cm:property name="database.maxIdle" value="16"/>
+            <cm:property name="database.testOnBorrow" value="false"/>
+            <cm:property name="database.validationQuery" value="SELECT 1 FROM DUAL"/>
+        </cm:default-properties>
+    </cm:property-placeholder>
+
+    <bean id="mysqlDatasource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+        <property name="driverClassName" value="${database.driverClassName}"/>
+        <property name="url" value="${database.url}"/>
+        <property name="username" value="${database.user}"/>
+        <property name="password" value="${database.password}"/>
+        <property name="initialSize" value="${database.initialSize}"/>
+        <property name="maxActive" value="${database.maxActive}"/>
+        <property name="minIdle" value="${database.minIdle}"/>
+        <property name="maxIdle" value="${database.maxIdle}"/>
+        <property name="testOnBorrow" value="${database.testOnBorrow}"/>
+        <property name="validationQuery" value="${database.validationQuery}"/>
+    </bean>
+
+    <camelContext id="customerservices-context" trace="false" xmlns="http://camel.apache.org/schema/blueprint">
+
+        <dataFormats>
+            <xmljson id="xmljsonWithOptions" forceTopLevelObject="true" trimSpaces="true" rootName="transfer" skipNamespaces="true" removeNamespacePrefixes="true"/>
+        </dataFormats>
+
+        <route id="getCustomers">
+            <from uri="jetty://{{base.rest.url}}{{getCustomers.uri}}"/>
+            <log message="getCustomers"/>
+            <setBody>
+                <simple>
+                    SELECT * FROM CUSTOMERS
+                </simple>
+            </setBody>
+            <to uri="jdbc:mysqlDatasource"/>
+        </route>
+
+        <route id="getBalance">
+            <from uri="jetty://{{base.rest.url}}{{getBalance.uri}}"/>
+            <log message="getBalance for ${header.id}"/>
+            <setBody>
+                <simple>
+                    SELECT * FROM ACCOUNTS WHERE customerid = ${header.id}
+                </simple>
+            </setBody>
+            <to uri="jdbc:mysqlDatasource"/>
+        </route>
+
+        <route id="transferMoney">
+            <from uri="jetty://{{base.rest.url}}{{transferMoney.uri}}"/>
+            <convertBodyTo type="java.lang.String" charset="UTF-8"/>
+            <log message="transferMoney for ${body}"/>
+            <unmarshal ref="xmljsonWithOptions"/>
+            <setHeader headerName="fromId">
+                <xpath resultType="java.lang.String">/transfer/fromId/text()</xpath>
+            </setHeader>
+            <setHeader headerName="toId">
+                <xpath resultType="java.lang.String">/transfer/toId/text()</xpath>
+            </setHeader>
+            <setHeader headerName="amount">
+                <xpath resultType="java.lang.String">/transfer/amount/text()</xpath>
+            </setHeader>
+            <log message="${header.fromId} => ${header.toId} == ${header.amount}"/>
+            <setBody>
+                <simple>
+                    INSERT INTO TRANSACTIONS (fromid, toid, amount) VALUE (${header.fromId}, ${header.toId}, ${header.amount});
+                    SELECT LAST_INSERT_ID();
+                </simple>
+            </setBody>
+            <to uri="jdbc:mysqlDatasource"/>
+        </route>
+
+    </camelContext>
+
+</blueprint>
