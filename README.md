@@ -15,8 +15,12 @@ Columns: Id, FromId, ToId, Amount
 * getCustomers
 ** GET: http://localhost:9001/fuse/techstock/getcustomers
 
+* depositBalance
+** POST: http://localhost:9001/fuse/techstock/depositbalance / { "id":1, amount:100 }
+
 * getBalance
 ** GET: http://localhost:9001/fuse/techstock/getbalance?id=1
+
 * transferMoney
 ** POST: http://localhost:9001/fuse/techstock/transfermoney / { "fromId":1, "toId":2, amount:100 }
 

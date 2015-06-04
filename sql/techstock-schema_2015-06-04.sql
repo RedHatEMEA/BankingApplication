@@ -7,7 +7,7 @@
 #
 # Host: 127.0.0.1 (MySQL 10.0.14-MariaDB)
 # Database: techstock
-# Generation Time: 2015-06-04 10:59:36 +0000
+# Generation Time: 2015-06-04 13:49:02 +0000
 # ************************************************************
 
 
@@ -28,7 +28,7 @@ DROP TABLE IF EXISTS `ACCOUNTS`;
 CREATE TABLE `ACCOUNTS` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `customerid` int(11) DEFAULT NULL,
-  `amount` decimal(11,0) DEFAULT NULL,
+  `amount` decimal(11,2) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -58,7 +58,7 @@ CREATE TABLE `TRANSACTIONS` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `fromid` int(11) DEFAULT NULL,
   `toid` int(11) DEFAULT NULL,
-  `amount` decimal(10,0) DEFAULT NULL,
+  `amount` decimal(10,2) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
