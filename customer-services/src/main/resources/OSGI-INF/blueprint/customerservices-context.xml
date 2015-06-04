@@ -17,6 +17,7 @@
             <cm:property name="depositBalance.uri" value="/fuse/techstock/depositbalance"/>
             <cm:property name="getBalance.uri" value="/fuse/techstock/getbalance?matchOnUriPrefix=true"/>
             <cm:property name="transferMoney.uri" value="/fuse/techstock/transfermoney"/>
+            <cm:property name="getTransactions.uri" value="/fuse/techstock/gettransactions"/>
 
             <!-- Database -->
             <cm:property name="database.driverClassName" value="com.mysql.jdbc.Driver"/>
@@ -60,6 +61,42 @@
             <xmljson id="xmljsonCustomer" forceTopLevelObject="true" trimSpaces="true" rootName="customer" skipNamespaces="true" removeNamespacePrefixes="true"/>
         </dataFormats>
 
+        <route id="getCustomers">
+            <from uri="jetty://{{base.rest.url}}{{getCustomers.uri}}"/>
+            <log message="getCustomers"/>
+            <setBody>
+                <simple>
+                    SELECT * FROM CUSTOMERS
+                </simple>
+            </setBody>
+            <log message="SQL: ${body}"/>
+            <to uri="jdbc:mysqlDatasource"/>
+        </route>
+
+        <route id="getBalance">
+            <from uri="jetty://{{base.rest.url}}{{getBalance.uri}}"/>
+            <log message="getBalance for ${header.id}"/>
+            <setBody>
+                <simple>
+                    SELECT * FROM ACCOUNTS WHERE customerid = ${header.id}
+                </simple>
+            </setBody>
+            <log message="SQL: ${body}"/>
+            <to uri="jdbc:mysqlDatasource"/>
+        </route>
+
+        <route id="getTransactions">
+            <from uri="jetty://{{base.rest.url}}{{getTransactions.uri}}"/>
+            <log message="getTransactions for ${header.id}"/>
+            <setBody>
+                <simple>
+                    SELECT * FROM TRANSACTIONS WHERE (fromId = ${header.id} || toId = ${header.id})
+                </simple>
+            </setBody>
+            <log message="SQL: ${body}"/>
+            <to uri="jdbc:mysqlDatasource"/>
+        </route>
+
         <route id="createCustomer">
             <from uri="jetty://{{base.rest.url}}{{createCustomer.uri}}"/>
             <transacted ref="PROPAGATION_REQUIRED"/>
@@ -101,18 +138,6 @@
             </setBody>
         </route>
 
-        <route id="getCustomers">
-            <from uri="jetty://{{base.rest.url}}{{getCustomers.uri}}"/>
-            <log message="getCustomers"/>
-            <setBody>
-                <simple>
-                    SELECT * FROM CUSTOMERS
-                </simple>
-            </setBody>
-            <log message="SQL: ${body}"/>
-            <to uri="jdbc:mysqlDatasource"/>
-        </route>
-
         <route id="depositBalance">
             <from uri="jetty://{{base.rest.url}}{{depositBalance.uri}}"/>
             <convertBodyTo type="java.lang.String" charset="UTF-8"/>
@@ -124,13 +149,16 @@
             <setHeader headerName="amount">
                 <xpath resultType="java.lang.Double">/deposit/amount/number()</xpath>
             </setHeader>
-            <log message="${header.id} == ${header.amount}"/>
+            <setHeader headerName="operation">
+                <xpath resultType="java.lang.String">/deposit/operation/string()</xpath>
+            </setHeader>
+            <log message="${header.id} == ${header.operation}${header.amount}"/>
             <setHeader headerName="CamelRetrieveGeneratedKeys">
                 <constant>true</constant>
             </setHeader>
             <setBody>
                 <simple>
-                    INSERT INTO TRANSACTIONS (fromid, toid, amount) VALUE (-1, ${header.id}, ${header.amount})
+                    INSERT INTO TRANSACTIONS (fromid, toid, amount, details) VALUE (-1, ${header.id}, ${header.amount}, '${header.operation}${header.amount} - deposit')
                 </simple>
             </setBody>
             <log message="SQL: ${body}"/>
@@ -140,7 +168,7 @@
             </setHeader>
             <setBody>
                 <simple>
-                    UPDATE ACCOUNTS SET amount = (amount + ${header.amount}) WHERE customerid = ${header.id}
+                    UPDATE ACCOUNTS SET amount = (amount ${header.operation} ${header.amount}) WHERE customerid = ${header.id}
                 </simple>
             </setBody>
             <log message="SQL: ${body}"/>
@@ -148,17 +176,6 @@
             <setBody>
                 <simple>${header.NewTransactionId}</simple>
             </setBody>
-        </route>
-
-        <route id="getBalance">
-            <from uri="jetty://{{base.rest.url}}{{getBalance.uri}}"/>
-            <log message="getBalance for ${header.id}"/>
-            <setBody>
-                <simple>
-                    SELECT * FROM ACCOUNTS WHERE customerid = ${header.id}
-                </simple>
-            </setBody>
-            <to uri="jdbc:mysqlDatasource"/>
         </route>
 
         <route id="transferMoney">
@@ -182,7 +199,7 @@
             </setHeader>
             <setBody>
                 <simple>
-                    INSERT INTO TRANSACTIONS (fromid, toid, amount) VALUE (${header.fromId}, ${header.toId}, ${header.amount})
+                    INSERT INTO TRANSACTIONS (fromid, toid, amount, details) VALUE (${header.fromId}, ${header.toId}, ${header.amount}, 'transfer')
                 </simple>
             </setBody>
             <log message="SQL: ${body}"/>
