@@ -27,7 +27,7 @@
         <build.osgi.import.additional/>
         <build.osgi.import.pkg>
             !${build.osgi.export.pkg},
-            com.creditsuisse.*;${build.osgi.import.build.version},
+            com.redhat.*;${build.osgi.import.build.version},
             ${build.osgi.import.before.defaults},
             ${build.osgi.import.defaults},
             ${build.osgi.import.additional},

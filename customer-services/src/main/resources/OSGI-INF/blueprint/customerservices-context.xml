@@ -7,15 +7,16 @@
        http://camel.apache.org/schema/blueprint http://camel.apache.org/schema/blueprint/camel-blueprint.xsd
        http://aries.apache.org/blueprint/xmlns/blueprint-cm/v1.1.0 http://aries.apache.org/schemas/blueprint-cm/blueprint-cm-1.1.0.xsd">
 
-    <cm:property-placeholder persistent-id="com.creditsuisse.fuse.project1" update-strategy="reload">
+    <cm:property-placeholder persistent-id="com.redhat.techstock.customerservices" update-strategy="reload">
         <cm:default-properties>
             <!-- REST -->
             <cm:property name="base.rest.url" value="http://0.0.0.0:9001"/>
 
             <cm:property name="createCustomer.uri" value="/fuse/techstock/createcustomer"/>
+            <cm:property name="getCustomer.uri" value="/fuse/techstock/getcustomer"/>
             <cm:property name="getCustomers.uri" value="/fuse/techstock/getcustomers"/>
             <cm:property name="depositBalance.uri" value="/fuse/techstock/depositbalance"/>
-            <cm:property name="getBalance.uri" value="/fuse/techstock/getbalance?matchOnUriPrefix=true"/>
+            <cm:property name="getBalance.uri" value="/fuse/techstock/getbalance"/>
             <cm:property name="transferMoney.uri" value="/fuse/techstock/transfermoney"/>
             <cm:property name="getTransactions.uri" value="/fuse/techstock/gettransactions"/>
 
@@ -60,6 +61,18 @@
             <xmljson id="xmljsonDeposit" forceTopLevelObject="true" trimSpaces="true" rootName="deposit" skipNamespaces="true" removeNamespacePrefixes="true"/>
             <xmljson id="xmljsonCustomer" forceTopLevelObject="true" trimSpaces="true" rootName="customer" skipNamespaces="true" removeNamespacePrefixes="true"/>
         </dataFormats>
+
+        <route id="getCustomer">
+            <from uri="jetty://{{base.rest.url}}{{getCustomer.uri}}"/>
+            <log message="getCustomer for ${header.username}"/>
+            <setBody>
+                <simple>
+                    SELECT C.*, A.amount FROM CUSTOMERS C LEFT JOIN ACCOUNTS A ON C.id =  A.customerid WHERE C.username = '${header.username}'
+                </simple>
+            </setBody>
+            <log message="SQL: ${body}"/>
+            <to uri="jdbc:mysqlDatasource"/>
+        </route>
 
         <route id="getCustomers">
             <from uri="jetty://{{base.rest.url}}{{getCustomers.uri}}"/>

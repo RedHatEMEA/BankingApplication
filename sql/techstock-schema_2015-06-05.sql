@@ -7,7 +7,7 @@
 #
 # Host: 127.0.0.1 (MySQL 10.0.14-MariaDB)
 # Database: techstock
-# Generation Time: 2015-06-04 13:49:02 +0000
+# Generation Time: 2015-06-05 08:27:58 +0000
 # ************************************************************
 
 
@@ -44,7 +44,10 @@ CREATE TABLE `CUSTOMERS` (
   `firstname` varchar(100) NOT NULL DEFAULT '',
   `surname` varchar(100) NOT NULL DEFAULT '',
   `address` varchar(255) NOT NULL DEFAULT '',
-  PRIMARY KEY (`id`)
+  `email` varchar(100) DEFAULT NULL,
+  `username` varchar(100) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `UX_username` (`username`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
@@ -59,6 +62,7 @@ CREATE TABLE `TRANSACTIONS` (
   `fromid` int(11) DEFAULT NULL,
   `toid` int(11) DEFAULT NULL,
   `amount` decimal(10,2) DEFAULT NULL,
+  `details` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 

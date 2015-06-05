@@ -3,17 +3,20 @@ Used for the RBS Techstock demo, if once complete is still totally generic, will
 
 #DB Schema (See sql folder)
 Table: Customer 
-Columns: Id, FirstName, Surname, Address
+Columns: Id, FirstName, Surname, Address, Email, Username
 
 Table: Account 
 Columns: Id, CustomerId, Balance
 
 Table: Transactions 
-Columns: Id, FromId, ToId, Amount
+Columns: Id, FromId, ToId, Amount, Details
 
 #REST
 * createCustomer
 ** POST: http://localhost:9001/fuse/techstock/createcustomer / { "firstname":"nabeel", "surname":"saad", "address":"2 some road" }
+
+* getCustomer
+** GET: http://localhost:9001/fuse/techstock/getcustomer?username=gareth
 
 * getCustomers
 ** GET: http://localhost:9001/fuse/techstock/getcustomers
@@ -31,6 +34,7 @@ Columns: Id, FromId, ToId, Amount
 ** GET: http://localhost:9001/fuse/techstock/gettransactions?id=10
 
 #Install into Fuse
+* mvn clean install
 * features:addurl mvn:com.redhat/techstock-features/1.0.0-SNAPSHOT/xml/features
 * features:install com.redhat-customer-services
 * route-list
