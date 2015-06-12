@@ -1,5 +1,5 @@
 # BankingApplication
-Used for the RBS Techstock demo, if once complete is still totally generic, will be converted to public
+A generic banking backend, REST interfaces for Fuse
 
 #DB Schema (See sql folder)
 Table: Customer 
@@ -13,10 +13,10 @@ Columns: Id, FromId, ToId, Amount, Details
 
 #REST
 * createCustomer
-** POST: http://localhost:9001/fuse/techstock/createcustomer / { "firstname":"nabeel", "surname":"saad", "address":"2 some road" }
+** POST: http://localhost:9001/fuse/techstock/createcustomer / { "firstname":"joe", "surname":"bloggs", "address":"2 some road" }
 
 * getCustomer
-** GET: http://localhost:9001/fuse/techstock/getcustomer?username=gareth
+** GET: http://localhost:9001/fuse/techstock/getcustomer?username=joe
 
 * getCustomers
 ** GET: http://localhost:9001/fuse/techstock/getcustomers
