@@ -1,192 +1,192 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
-    <modelVersion>4.0.0</modelVersion>
-    <parent>
-        <groupId>com.redhat</groupId>
-        <artifactId>osgi-plugins-parent</artifactId>
-        <version>1.0.0-SNAPSHOT</version>
-        <relativePath>../osgi-plugins-parent</relativePath>
-    </parent>
-    <artifactId>camel-parent</artifactId>
-    <packaging>pom</packaging>
-    <name>${project.artifactId}</name>
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>com.redhat</groupId>
+		<artifactId>osgi-plugins-parent</artifactId>
+		<version>1.0.0-SNAPSHOT</version>
+		<relativePath>../osgi-plugins-parent</relativePath>
+	</parent>
+	<artifactId>camel-parent</artifactId>
+	<packaging>pom</packaging>
+	<name>${project.artifactId}</name>
 
-    <properties>
-        <!-- JBoss Fuse BOM properties -->
-        <osgi-version>5.0.0</osgi-version>
-        <osgi-compendium-version>4.3.1</osgi-compendium-version>
-        <fuse-version>6.1.0.redhat-379</fuse-version>
-        <camel-version>2.12.0.redhat-610379</camel-version>
-        <cxf-version>2.7.0.redhat-610379</cxf-version>
-        <activemq-version>5.9.0.redhat-610379</activemq-version>
-        <karaf-version>2.3.0.redhat-610379</karaf-version>
-        <fabric8-version>1.0.0.redhat-379</fabric8-version>
+	<properties>
+		<!-- JBoss Fuse BOM properties -->
+		<osgi-version>5.0.0</osgi-version>
+		<osgi-compendium-version>4.3.1</osgi-compendium-version>
+		<fuse-version>6.1.0.redhat-379</fuse-version>
+		<camel-version>2.12.0.redhat-610379</camel-version>
+		<cxf-version>2.7.0.redhat-610379</cxf-version>
+		<activemq-version>5.9.0.redhat-610379</activemq-version>
+		<karaf-version>2.3.0.redhat-610379</karaf-version>
+		<fabric8-version>1.0.0.redhat-379</fabric8-version>
 
-        <!-- BOM -->
-        <jboss-fuse-bom-version>${fuse-version}</jboss-fuse-bom-version>
+		<!-- BOM -->
+		<jboss-fuse-bom-version>${fuse-version}</jboss-fuse-bom-version>
 
-        <!-- Database -->
-        <commons-dbcp-version>1.4_3</commons-dbcp-version>
-        <mysql-version>5.1.35</mysql-version>
+		<!-- Database -->
+		<commons-dbcp-version>1.4_3</commons-dbcp-version>
+		<mysql-version>5.1.35</mysql-version>
 
-        <!-- Testing -->
-        <junit-version>4.12</junit-version>
-        <slf4j-version>1.7.12</slf4j-version>
-        <mockito-core-version>1.10.19</mockito-core-version>
-    </properties>
+		<!-- Testing -->
+		<junit-version>4.12</junit-version>
+		<slf4j-version>1.7.12</slf4j-version>
+		<mockito-core-version>1.10.19</mockito-core-version>
+	</properties>
 
-    <!-- Components -->
-    <dependencyManagement>
-        <dependencies>
-            <!-- Fuse BOM -->
-            <dependency>
-                <groupId>org.jboss.fuse.bom</groupId>
-                <artifactId>jboss-fuse-parent</artifactId>
-                <version>${jboss-fuse-bom-version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
+	<!-- Components -->
+	<dependencyManagement>
+		<dependencies>
+			<!-- Fuse BOM -->
+			<dependency>
+				<groupId>org.jboss.fuse.bom</groupId>
+				<artifactId>jboss-fuse-parent</artifactId>
+				<version>${jboss-fuse-bom-version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
 
-            <!-- Camel -->
-            <dependency>
-                <groupId>org.apache.camel</groupId>
-                <artifactId>camel-test-blueprint</artifactId>
-                <version>${camel-version}</version>
-                <scope>test</scope>
-            </dependency>
+			<!-- Camel -->
+			<dependency>
+				<groupId>org.apache.camel</groupId>
+				<artifactId>camel-test-blueprint</artifactId>
+				<version>${camel-version}</version>
+				<scope>test</scope>
+			</dependency>
 
-            <!-- Core OSGi -->
-            <dependency>
-                <groupId>org.osgi</groupId>
-                <artifactId>org.osgi.core</artifactId>
-                <version>${osgi-version}</version>
-                <scope>provided</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.osgi</groupId>
-                <artifactId>org.osgi.compendium</artifactId>
-                <version>${osgi-compendium-version}</version>
-                <scope>provided</scope>
-            </dependency>
+			<!-- Core OSGi -->
+			<dependency>
+				<groupId>org.osgi</groupId>
+				<artifactId>org.osgi.core</artifactId>
+				<version>${osgi-version}</version>
+				<scope>provided</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.osgi</groupId>
+				<artifactId>org.osgi.compendium</artifactId>
+				<version>${osgi-compendium-version}</version>
+				<scope>provided</scope>
+			</dependency>
 
-            <!-- Database -->
-            <dependency>
-                <groupId>org.apache.servicemix.bundles</groupId>
-                <artifactId>org.apache.servicemix.bundles.commons-dbcp</artifactId>
-                <version>${commons-dbcp-version}</version>
-                <scope>provided</scope>
-            </dependency>
-            <dependency>
-                <groupId>mysql</groupId>
-                <artifactId>mysql-connector-java</artifactId>
-                <version>${mysql-version}</version>
-                <scope>provided</scope>
-            </dependency>
+			<!-- Database -->
+			<dependency>
+				<groupId>org.apache.servicemix.bundles</groupId>
+				<artifactId>org.apache.servicemix.bundles.commons-dbcp</artifactId>
+				<version>${commons-dbcp-version}</version>
+				<scope>provided</scope>
+			</dependency>
+			<dependency>
+				<groupId>mysql</groupId>
+				<artifactId>mysql-connector-java</artifactId>
+				<version>${mysql-version}</version>
+				<scope>provided</scope>
+			</dependency>
 
-            <!-- Testing -->
-            <dependency>
-                <groupId>junit</groupId>
-                <artifactId>junit</artifactId>
-                <version>${junit-version}</version>
-                <scope>test</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.slf4j</groupId>
-                <artifactId>slf4j-log4j12</artifactId>
-                <version>${slf4j-version}</version>
-                <scope>test</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.mockito</groupId>
-                <artifactId>mockito-core</artifactId>
-                <version>${mockito-core-version}</version>
-                <scope>test</scope>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
+			<!-- Testing -->
+			<dependency>
+				<groupId>junit</groupId>
+				<artifactId>junit</artifactId>
+				<version>${junit-version}</version>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.slf4j</groupId>
+				<artifactId>slf4j-log4j12</artifactId>
+				<version>${slf4j-version}</version>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.mockito</groupId>
+				<artifactId>mockito-core</artifactId>
+				<version>${mockito-core-version}</version>
+				<scope>test</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
 
-    <dependencies>
-        <!-- Core Camel -->
-        <dependency>
-            <groupId>org.apache.camel</groupId>
-            <artifactId>camel-core</artifactId>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.camel</groupId>
-            <artifactId>camel-blueprint</artifactId>
-            <scope>provided</scope>
-        </dependency>
+	<dependencies>
+		<!-- Core Camel -->
+		<dependency>
+			<groupId>org.apache.camel</groupId>
+			<artifactId>camel-core</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.camel</groupId>
+			<artifactId>camel-blueprint</artifactId>
+			<scope>provided</scope>
+		</dependency>
 
-        <!-- Core OSGi -->
-        <dependency>
-            <groupId>org.osgi</groupId>
-            <artifactId>org.osgi.core</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.osgi</groupId>
-            <artifactId>org.osgi.compendium</artifactId>
-        </dependency>
+		<!-- Core OSGi -->
+		<dependency>
+			<groupId>org.osgi</groupId>
+			<artifactId>org.osgi.core</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.osgi</groupId>
+			<artifactId>org.osgi.compendium</artifactId>
+		</dependency>
 
-        <!-- Testing: Used to resolve blueprint namespaces -->
-        <dependency>
-            <groupId>org.apache.aries.blueprint</groupId>
-            <artifactId>org.apache.aries.blueprint</artifactId>
-            <scope>test</scope>
-        </dependency>
+		<!-- Testing: Used to resolve blueprint namespaces -->
+		<dependency>
+			<groupId>org.apache.aries.blueprint</groupId>
+			<artifactId>org.apache.aries.blueprint</artifactId>
+			<scope>test</scope>
+		</dependency>
 
-        <!-- Testing: Camel -->
-        <dependency>
-            <groupId>org.apache.camel</groupId>
-            <artifactId>camel-test</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.camel</groupId>
-            <artifactId>camel-test-blueprint</artifactId>
-            <scope>test</scope>
-        </dependency>
+		<!-- Testing: Camel -->
+		<dependency>
+			<groupId>org.apache.camel</groupId>
+			<artifactId>camel-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.camel</groupId>
+			<artifactId>camel-test-blueprint</artifactId>
+			<scope>test</scope>
+		</dependency>
 
-        <!-- Testing -->
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-log4j12</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.mockito</groupId>
-            <artifactId>mockito-core</artifactId>
-            <scope>test</scope>
-        </dependency>
-    </dependencies>
+		<!-- Testing -->
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-log4j12</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-core</artifactId>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
 
-    <build>
-        <pluginManagement>
-            <plugins>
-                <plugin>
-                    <groupId>org.apache.camel</groupId>
-                    <artifactId>camel-maven-plugin</artifactId>
-                    <version>${camel-version}</version>
-                </plugin>
-            </plugins>
-        </pluginManagement>
+	<build>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.apache.camel</groupId>
+					<artifactId>camel-maven-plugin</artifactId>
+					<version>${camel-version}</version>
+				</plugin>
+			</plugins>
+		</pluginManagement>
 
-        <plugins>
-            <plugin>
-                <groupId>org.apache.camel</groupId>
-                <artifactId>camel-maven-plugin</artifactId>
-                <configuration>
-                    <useBlueprint>true</useBlueprint>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.camel</groupId>
+				<artifactId>camel-maven-plugin</artifactId>
+				<configuration>
+					<useBlueprint>true</useBlueprint>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
 
 </project>
