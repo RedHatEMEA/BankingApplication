@@ -24,7 +24,6 @@
 
         <!-- Feature -->
         <module>techstock-features</module>
-        <module>banking-demo</module>
     </modules>
 
     <properties>
