@@ -10,7 +10,7 @@
     <cm:property-placeholder persistent-id="com.redhat.techstock.customerservices" update-strategy="reload">
         <cm:default-properties>
             <!-- REST -->
-            <cm:property name="base.rest.url" value="http://0.0.0.0:9001"/>
+            <cm:property name="base.rest.url" value="http://0.0.0.0:15001"/><!-- Between 15000 - 35530 in Openshift -->
 
             <cm:property name="createCustomer.uri" value="/fuse/techstock/createcustomer"/>
             <cm:property name="getCustomer.uri" value="/fuse/techstock/getcustomer"/>
@@ -23,8 +23,8 @@
             <!-- Database -->
             <cm:property name="database.driverClassName" value="com.mysql.jdbc.Driver"/>
             <cm:property name="database.url" value="jdbc:mysql://localhost:3306/techstock?autoReconnect=true"/>
-            <cm:property name="database.user" value="gareth"/>
-            <cm:property name="database.password" value="healy"/>
+            <cm:property name="database.user" value="admin2bNmj9f"/>
+            <cm:property name="database.password" value="_XNXj5ZhlzLq"/>
             <cm:property name="database.initialSize" value="4"/>
             <cm:property name="database.maxActive" value="32"/>
             <cm:property name="database.minIdle" value="4"/>

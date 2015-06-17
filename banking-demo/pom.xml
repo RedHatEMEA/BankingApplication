@@ -180,19 +180,7 @@
 			</plugin>
 
 			<!-- to generate the MANIFEST-FILE of the bundle -->
-			<plugin>
-				<groupId>org.apache.felix</groupId>
-				<artifactId>maven-bundle-plugin</artifactId>
-				<version>${maven-bundle-plugin.version}</version>
-				<extensions>true</extensions>
-				<configuration>
-					<instructions>
-						<Bundle-SymbolicName>banking-demo</Bundle-SymbolicName>
-						<Private-Package>com.redhat.*</Private-Package>
-						<Import-Package>*</Import-Package>
-					</instructions>
-				</configuration>
-			</plugin>
+cd
 
 			<!-- to run the example using mvn camel:run -->
 			<plugin>

@@ -1,80 +1,125 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
-    <modelVersion>4.0.0</modelVersion>
-    <parent>
-        <groupId>com.redhat</groupId>
-        <artifactId>camel-parent</artifactId>
-        <version>1.0.0-SNAPSHOT</version>
-        <relativePath>../camel-parent</relativePath>
-    </parent>
-    <artifactId>customer-services</artifactId>
-    <packaging>bundle</packaging>
-    <name>${project.artifactId}</name>
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>com.redhat</groupId>
+		<artifactId>camel-parent</artifactId>
+		<version>1.0.0-SNAPSHOT</version>
+		<relativePath>../camel-parent</relativePath>
+	</parent>
+	<artifactId>customer-services</artifactId>
+	<packaging>bundle</packaging>
+	<name>${project.artifactId}</name>
 
-    <properties>
-        <build.osgi.import.before.defaults>
-            com.mysql.jdbc
-        </build.osgi.import.before.defaults>
-        <build.osgi.export.pkg>com.redhat.techstock.customerservices.*</build.osgi.export.pkg>
-        <build.osgi.export.service/>
-        <build.osgi.activator/>
-    </properties>
+	<properties>
+		<fabric8-maven-plugin.version>1.2.0.Beta4</fabric8-maven-plugin.version>
+		<build.osgi.import.before.defaults>
+			com.mysql.jdbc
+		</build.osgi.import.before.defaults>
+		<build.osgi.export.pkg>com.redhat.techstock.customerservices.*</build.osgi.export.pkg>
+		<build.osgi.export.service/>
+		<build.osgi.activator/>
+	</properties>
 
-    <dependencies>
-        <dependency>
-            <groupId>org.apache.camel</groupId>
-            <artifactId>camel-jetty</artifactId>
-            <scope>provided</scope>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.apache.geronimo.specs</groupId>
-                    <artifactId>geronimo-servlet_2.5_spec</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.camel</groupId>
-            <artifactId>camel-jdbc</artifactId>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.camel</groupId>
-            <artifactId>camel-xmljson</artifactId>
-        </dependency>
+	<dependencies>
+		<dependency>
+			<groupId>org.apache.camel</groupId>
+			<artifactId>camel-jetty</artifactId>
+			<scope>provided</scope>
+			<exclusions>
+				<exclusion>
+					<groupId>org.apache.geronimo.specs</groupId>
+					<artifactId>geronimo-servlet_2.5_spec</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.camel</groupId>
+			<artifactId>camel-jdbc</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.camel</groupId>
+			<artifactId>camel-xmljson</artifactId>
+		</dependency>
 
-        <!-- And also XOM must be included. XOM cannot be included by default due to an incompatible
-        license with ASF; so add this manually -->
-        <dependency>
-            <groupId>xom</groupId>
-            <artifactId>xom</artifactId>
-            <version>1.2.5</version>
-            <scope>provided</scope>
-        </dependency>
+		<!-- And also XOM must be included. XOM cannot be included by default due to an incompatible
+		license with ASF; so add this manually -->
+		<dependency>
+			<groupId>xom</groupId>
+			<artifactId>xom</artifactId>
+			<version>1.2.5</version>
+			<scope>provided</scope>
+		</dependency>
 
-        <!-- Database -->
-        <dependency>
-            <groupId>org.apache.servicemix.bundles</groupId>
-            <artifactId>org.apache.servicemix.bundles.commons-dbcp</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-        </dependency>
+		<!-- Database -->
+		<dependency>
+			<groupId>org.apache.servicemix.bundles</groupId>
+			<artifactId>org.apache.servicemix.bundles.commons-dbcp</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+		</dependency>
 
-        <!-- Testing -->
-        <dependency>
-            <groupId>org.apache.camel</groupId>
-            <artifactId>camel-spring</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-tx</artifactId>
-            <version>3.2.8.RELEASE</version>
-            <scope>test</scope>
-        </dependency>
-    </dependencies>
+		<!-- Testing -->
+		<dependency>
+			<groupId>org.apache.camel</groupId>
+			<artifactId>camel-spring</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-tx</artifactId>
+			<version>3.2.8.RELEASE</version>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
 
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.felix</groupId>
+				<artifactId>maven-bundle-plugin</artifactId>
+				<extensions>true</extensions>
+				<configuration>
+					<instructions>
+						<Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
+						<Private-Package>com.redhat.*</Private-Package>
+						<Import-Package>*</Import-Package>
+						<_removeheaders>Import-Service</_removeheaders>
+					</instructions>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>io.fabric8</groupId>
+				<artifactId>fabric8-maven-plugin</artifactId>
+				<version>${fabric8-maven-plugin.version}</version>
+				<configuration>
+					<jolokiaUrl>
+						http://fuse-csterpis.rhcloud.com/jolokia
+					</jolokiaUrl>
+					<profile>customer-services</profile>
+					<features>camel-jetty camel-jdbc camel-xmljson transaction</features>
+					<featureRepos>
+						mvn:org.apache.camel.karaf/apache-camel/${camel-version}/xml/features
+						mvn:org.apache.cxf.karaf/apache-cxf/${cxf-version}/xml/features
+						mvn:org.apache.activemq/activemq-karaf/${activemq-version}/xml/features
+						mvn:org.apache.karaf.assemblies.features/standard/${karaf-version}/xml/features
+						mvn:org.apache.karaf.assemblies.features/enterprise/${karaf-version}/xml/features
+						mvn:io.fabric8/fabric8-karaf/${fabric8-version}/xml/features
+					</featureRepos>
+					<bundles>
+						mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.commons-dbcp/${commons-dbcp-version}
+						mvn:mysql/mysql-connector-java/${mysql-version}
+						mvn:xom/xom/1.2.5
+					    mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.commons-dbcp/${commons-dbcp-version}
+						mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.commons-pool/1.5.4_4
+					</bundles>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
 </project>
