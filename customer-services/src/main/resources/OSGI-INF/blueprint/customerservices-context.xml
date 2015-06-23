@@ -1,258 +1,272 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <blueprint xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-           xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
-           xmlns:cm="http://aries.apache.org/blueprint/xmlns/blueprint-cm/v1.1.0"
-           xsi:schemaLocation="
+		   xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+		   xmlns:cm="http://aries.apache.org/blueprint/xmlns/blueprint-cm/v1.1.0"
+		   xsi:schemaLocation="
        http://www.osgi.org/xmlns/blueprint/v1.0.0 http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd
        http://camel.apache.org/schema/blueprint http://camel.apache.org/schema/blueprint/camel-blueprint.xsd
        http://aries.apache.org/blueprint/xmlns/blueprint-cm/v1.1.0 http://aries.apache.org/schemas/blueprint-cm/blueprint-cm-1.1.0.xsd">
 
-    <cm:property-placeholder persistent-id="com.redhat.techstock.customerservices" update-strategy="reload">
-        <cm:default-properties>
-            <!-- REST -->
-            <cm:property name="base.rest.url" value="http://0.0.0.0:15001"/><!-- Between 15000 - 35530 in Openshift -->
+	<cm:property-placeholder persistent-id="com.redhat.techstock.customerservices" update-strategy="reload">
+		<cm:default-properties>
+			<!-- REST -->
+			<cm:property name="base.rest.url" value="http://0.0.0.0:15001"/>
+			<!-- Between 15000 - 35530 in Openshift -->
 
-            <cm:property name="createCustomer.uri" value="/fuse/techstock/createcustomer"/>
-            <cm:property name="getCustomer.uri" value="/fuse/techstock/getcustomer"/>
-            <cm:property name="getCustomers.uri" value="/fuse/techstock/getcustomers"/>
-            <cm:property name="depositBalance.uri" value="/fuse/techstock/depositbalance"/>
-            <cm:property name="getBalance.uri" value="/fuse/techstock/getbalance"/>
-            <cm:property name="transferMoney.uri" value="/fuse/techstock/transfermoney"/>
-            <cm:property name="getTransactions.uri" value="/fuse/techstock/gettransactions"/>
+			<cm:property name="createCustomer.uri" value="/fuse/techstock/createcustomer"/>
+			<cm:property name="getCustomer.uri" value="/fuse/techstock/getcustomer"/>
+			<cm:property name="getCustomers.uri" value="/fuse/techstock/getcustomers"/>
+			<cm:property name="depositBalance.uri" value="/fuse/techstock/depositbalance"/>
+			<cm:property name="getBalance.uri" value="/fuse/techstock/getbalance"/>
+			<cm:property name="transferMoney.uri" value="/fuse/techstock/transfermoney"/>
+			<cm:property name="getTransactions.uri" value="/fuse/techstock/gettransactions"/>
 
-            <!-- Database -->
-            <cm:property name="database.driverClassName" value="com.mysql.jdbc.Driver"/>
-            <cm:property name="database.url" value="jdbc:mysql://localhost:3306/techstock?autoReconnect=true"/>
-            <cm:property name="database.user" value="admin2bNmj9f"/>
-            <cm:property name="database.password" value="_XNXj5ZhlzLq"/>
-            <cm:property name="database.initialSize" value="4"/>
-            <cm:property name="database.maxActive" value="32"/>
-            <cm:property name="database.minIdle" value="4"/>
-            <cm:property name="database.maxIdle" value="16"/>
-            <cm:property name="database.testOnBorrow" value="false"/>
-            <cm:property name="database.validationQuery" value="SELECT 1 FROM DUAL"/>
-        </cm:default-properties>
-    </cm:property-placeholder>
+			<!-- Database -->
+			<cm:property name="database.driverClassName" value="com.mysql.jdbc.Driver"/>
+			<cm:property name="database.url" value="jdbc:mysql://localhost:3306/techstock?autoReconnect=true"/>
+			<cm:property name="database.user" value="admin2bNmj9f"/>
+			<cm:property name="database.password" value="_XNXj5ZhlzLq"/>
+			<cm:property name="database.initialSize" value="4"/>
+			<cm:property name="database.maxActive" value="32"/>
+			<cm:property name="database.minIdle" value="4"/>
+			<cm:property name="database.maxIdle" value="16"/>
+			<cm:property name="database.testOnBorrow" value="false"/>
+			<cm:property name="database.validationQuery" value="SELECT 1 FROM DUAL"/>
+		</cm:default-properties>
+	</cm:property-placeholder>
 
-    <reference id="platformTxManager" interface="org.springframework.transaction.PlatformTransactionManager" availability="mandatory"/>
+	<reference id="platformTxManager" interface="org.springframework.transaction.PlatformTransactionManager" availability="mandatory"/>
 
-    <bean id="PROPAGATION_REQUIRED" class="org.apache.camel.spring.spi.SpringTransactionPolicy">
-        <property name="transactionManager" ref="platformTxManager"/>
-        <property name="propagationBehaviorName" value="PROPAGATION_REQUIRED"/>
-    </bean>
+	<bean id="PROPAGATION_REQUIRED" class="org.apache.camel.spring.spi.SpringTransactionPolicy">
+		<property name="transactionManager" ref="platformTxManager"/>
+		<property name="propagationBehaviorName" value="PROPAGATION_REQUIRED"/>
+	</bean>
 
-    <bean id="mysqlDatasource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
-        <property name="driverClassName" value="${database.driverClassName}"/>
-        <property name="url" value="${database.url}"/>
-        <property name="username" value="${database.user}"/>
-        <property name="password" value="${database.password}"/>
-        <property name="initialSize" value="${database.initialSize}"/>
-        <property name="maxActive" value="${database.maxActive}"/>
-        <property name="minIdle" value="${database.minIdle}"/>
-        <property name="maxIdle" value="${database.maxIdle}"/>
-        <property name="testOnBorrow" value="${database.testOnBorrow}"/>
-        <property name="validationQuery" value="${database.validationQuery}"/>
-    </bean>
+	<bean id="mysqlDatasource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+		<property name="driverClassName" value="${database.driverClassName}"/>
+		<property name="url" value="${database.url}"/>
+		<property name="username" value="${database.user}"/>
+		<property name="password" value="${database.password}"/>
+		<property name="initialSize" value="${database.initialSize}"/>
+		<property name="maxActive" value="${database.maxActive}"/>
+		<property name="minIdle" value="${database.minIdle}"/>
+		<property name="maxIdle" value="${database.maxIdle}"/>
+		<property name="testOnBorrow" value="${database.testOnBorrow}"/>
+		<property name="validationQuery" value="${database.validationQuery}"/>
+	</bean>
 
-    <camelContext id="customerservices-context" trace="false" xmlns="http://camel.apache.org/schema/blueprint">
+	<bean id="jsonProcessor" class="com.redhat.techstock.customerservices.services.JsonProcessor"/>
 
-        <dataFormats>
-            <xmljson id="xmljsonTransfer" forceTopLevelObject="true" trimSpaces="true" rootName="transfer" skipNamespaces="true" removeNamespacePrefixes="true"/>
-            <xmljson id="xmljsonDeposit" forceTopLevelObject="true" trimSpaces="true" rootName="deposit" skipNamespaces="true" removeNamespacePrefixes="true"/>
-            <xmljson id="xmljsonCustomer" forceTopLevelObject="true" trimSpaces="true" rootName="customer" skipNamespaces="true" removeNamespacePrefixes="true"/>
-        </dataFormats>
+	<camelContext id="customerservices-context" trace="false" xmlns="http://camel.apache.org/schema/blueprint">
 
-        <route id="getCustomer">
-            <from uri="jetty://{{base.rest.url}}{{getCustomer.uri}}"/>
-            <log message="getCustomer for ${header.username}"/>
-            <setBody>
-                <simple>
-                    SELECT C.*, A.amount FROM CUSTOMERS C LEFT JOIN ACCOUNTS A ON C.id = A.customerid WHERE C.username = '${header.username}'
-                </simple>
-            </setBody>
-            <log message="SQL: ${body}"/>
-            <to uri="jdbc:mysqlDatasource"/>
-        </route>
+		<dataFormats>
+			<xmljson id="xmljsonTransfer" forceTopLevelObject="true" trimSpaces="true" rootName="transfer" skipNamespaces="true"
+					 removeNamespacePrefixes="true"/>
+			<xmljson id="xmljsonDeposit" forceTopLevelObject="true" trimSpaces="true" rootName="deposit" skipNamespaces="true"
+					 removeNamespacePrefixes="true"/>
+			<xmljson id="xmljsonCustomer" forceTopLevelObject="true" trimSpaces="true" rootName="customer" skipNamespaces="true"
+					 removeNamespacePrefixes="true"/>
+		</dataFormats>
 
-        <route id="getCustomers">
-            <from uri="jetty://{{base.rest.url}}{{getCustomers.uri}}"/>
-            <log message="getCustomers"/>
-            <setBody>
-                <simple>
-                    SELECT * FROM CUSTOMERS
-                </simple>
-            </setBody>
-            <log message="SQL: ${body}"/>
-            <to uri="jdbc:mysqlDatasource"/>
-        </route>
+		<route id="getCustomer">
+			<from uri="jetty://{{base.rest.url}}{{getCustomer.uri}}"/>
+			<log message="getCustomer for ${header.username}"/>
+			<setBody>
+				<simple>
+					SELECT C.*, A.amount FROM CUSTOMERS C LEFT JOIN ACCOUNTS A ON C.id = A.customerid WHERE C.username =
+					'${header.username}'
+				</simple>
+			</setBody>
+			<log message="SQL: ${body}"/>
+			<to uri="jdbc:mysqlDatasource"/>
+			<process ref="jsonProcessor"/>
+		</route>
 
-        <route id="getBalance">
-            <from uri="jetty://{{base.rest.url}}{{getBalance.uri}}"/>
-            <log message="getBalance for ${header.id}"/>
-            <setBody>
-                <simple>
-                    SELECT * FROM ACCOUNTS WHERE customerid = ${header.id}
-                </simple>
-            </setBody>
-            <log message="SQL: ${body}"/>
-            <to uri="jdbc:mysqlDatasource"/>
-        </route>
+		<route id="getCustomers">
+			<from uri="jetty://{{base.rest.url}}{{getCustomers.uri}}"/>
+			<log message="getCustomers"/>
+			<setBody>
+				<simple>
+					SELECT * FROM CUSTOMERS
+				</simple>
+			</setBody>
+			<log message="SQL: ${body}"/>
+			<to uri="jdbc:mysqlDatasource"/>
+			<process ref="jsonProcessor"/>
+		</route>
 
-        <route id="getTransactions">
-            <from uri="jetty://{{base.rest.url}}{{getTransactions.uri}}"/>
-            <log message="getTransactions for ${header.id}"/>
-            <setBody>
-                <simple>
-                    SELECT * FROM TRANSACTIONS WHERE (fromId = ${header.id} || toId = ${header.id})
-                </simple>
-            </setBody>
-            <log message="SQL: ${body}"/>
-            <to uri="jdbc:mysqlDatasource"/>
-        </route>
+		<route id="getBalance">
+			<from uri="jetty://{{base.rest.url}}{{getBalance.uri}}"/>
+			<log message="getBalance for ${header.id}"/>
+			<setBody>
+				<simple>
+					SELECT * FROM ACCOUNTS WHERE customerid = ${header.id}
+				</simple>
+			</setBody>
+			<log message="SQL: ${body}"/>
+			<to uri="jdbc:mysqlDatasource"/>
+			<process ref="jsonProcessor"/>
+		</route>
 
-        <route id="createCustomer">
-            <from uri="jetty://{{base.rest.url}}{{createCustomer.uri}}"/>
-            <transacted ref="PROPAGATION_REQUIRED"/>
-            <convertBodyTo type="java.lang.String" charset="UTF-8"/>
-            <log message="createCustomer for ${body}"/>
-            <unmarshal ref="xmljsonCustomer"/>
-            <setHeader headerName="firstname">
-                <xpath resultType="java.lang.String">/customer/firstname/text()</xpath>
-            </setHeader>
-            <setHeader headerName="surname">
-                <xpath resultType="java.lang.String">/customer/surname/text()</xpath>
-            </setHeader>
-            <setHeader headerName="address">
-                <xpath resultType="java.lang.String">/customer/address/text()</xpath>
-            </setHeader>
-            <log message="${header.firstname} ${header.surname} => ${header.address}"/>
-            <setHeader headerName="CamelRetrieveGeneratedKeys">
-                <constant>true</constant>
-            </setHeader>
-            <setBody>
-                <simple>
-                    INSERT INTO CUSTOMERS (firstname, surname, address) VALUE ('${header.firstname}', '${header.surname}', '${header.address}')
-                </simple>
-            </setBody>
-            <log message="SQL: ${body}"/>
-            <to uri="jdbc:mysqlDatasource"/>
-            <setHeader headerName="NewCustomerId">
-                <simple>${header.CamelGeneratedKeysRows.get(0).get('GENERATED_KEY')}</simple>
-            </setHeader>
-            <setBody>
-                <simple>
-                    INSERT INTO ACCOUNTS (customerid, amount) VALUE (${header.NewCustomerId}, 0)
-                </simple>
-            </setBody>
-            <log message="SQL: ${body}"/>
-            <to uri="jdbc:mysqlDatasource"/>
-            <setBody>
-                <simple>${header.NewCustomerId}</simple>
-            </setBody>
-        </route>
+		<route id="getTransactions">
+			<from uri="jetty://{{base.rest.url}}{{getTransactions.uri}}"/>
+			<log message="getTransactions for ${header.id}"/>
+			<setBody>
+				<simple>
+					SELECT * FROM TRANSACTIONS WHERE (fromId = ${header.id} || toId = ${header.id})
+				</simple>
+			</setBody>
+			<log message="SQL: ${body}"/>
+			<to uri="jdbc:mysqlDatasource"/>
+			<process ref="jsonProcessor"/>
+		</route>
 
-        <route id="depositBalance">
-            <from uri="jetty://{{base.rest.url}}{{depositBalance.uri}}"/>
-            <convertBodyTo type="java.lang.String" charset="UTF-8"/>
-            <log message="depositBalance for ${body}"/>
-            <unmarshal ref="xmljsonDeposit"/>
-            <setHeader headerName="id">
-                <xpath resultType="java.lang.Integer">/deposit/id/number()</xpath>
-            </setHeader>
-            <setHeader headerName="amount">
-                <xpath resultType="java.lang.Double">/deposit/amount/number()</xpath>
-            </setHeader>
-            <setHeader headerName="operation">
-                <xpath resultType="java.lang.String">/deposit/operation/string()</xpath>
-            </setHeader>
-            <choice>
-                <when>
-                    <simple>${header.operation} == '-'</simple>
-                    <setHeader headerName="textoperation">
-                        <constant>debit</constant>
-                    </setHeader>
-                </when>
-                <when>
-                    <simple>${header.operation} == '+'</simple>
-                    <setHeader headerName="textoperation">
-                        <constant>credit</constant>
-                    </setHeader>
-                </when>
-            </choice>
-            <log message="${header.id} == ${header.operation}${header.amount} ${header.textoperation}"/>
-            <setHeader headerName="CamelRetrieveGeneratedKeys">
-                <constant>true</constant>
-            </setHeader>
-            <setBody>
-                <simple>
-                    INSERT INTO TRANSACTIONS (fromid, toid, amount, details) VALUE (-1, ${header.id}, ${header.amount}, '${header.textoperation}')
-                </simple>
-            </setBody>
-            <log message="SQL: ${body}"/>
-            <to uri="jdbc:mysqlDatasource"/>
-            <setHeader headerName="NewTransactionId">
-                <simple>${header.CamelGeneratedKeysRows.get(0).get('GENERATED_KEY')}</simple>
-            </setHeader>
-            <setBody>
-                <simple>
-                    UPDATE ACCOUNTS SET amount = (amount ${header.operation} ${header.amount}) WHERE customerid = ${header.id}
-                </simple>
-            </setBody>
-            <log message="SQL: ${body}"/>
-            <to uri="jdbc:mysqlDatasource"/>
-            <setBody>
-                <simple>${header.NewTransactionId}</simple>
-            </setBody>
-        </route>
+		<route id="createCustomer">
+			<from uri="jetty://{{base.rest.url}}{{createCustomer.uri}}"/>
+			<transacted ref="PROPAGATION_REQUIRED"/>
+			<convertBodyTo type="java.lang.String" charset="UTF-8"/>
+			<log message="createCustomer for ${body}"/>
+			<unmarshal ref="xmljsonCustomer"/>
+			<setHeader headerName="firstname">
+				<xpath resultType="java.lang.String">/customer/firstname/text()</xpath>
+			</setHeader>
+			<setHeader headerName="surname">
+				<xpath resultType="java.lang.String">/customer/surname/text()</xpath>
+			</setHeader>
+			<setHeader headerName="address">
+				<xpath resultType="java.lang.String">/customer/address/text()</xpath>
+			</setHeader>
+			<log message="${header.firstname} ${header.surname} => ${header.address}"/>
+			<setHeader headerName="CamelRetrieveGeneratedKeys">
+				<constant>true</constant>
+			</setHeader>
+			<setBody>
+				<simple>
+					INSERT INTO CUSTOMERS (firstname, surname, address) VALUE ('${header.firstname}', '${header.surname}',
+					'${header.address}')
+				</simple>
+			</setBody>
+			<log message="SQL: ${body}"/>
+			<to uri="jdbc:mysqlDatasource"/>
+			<setHeader headerName="NewCustomerId">
+				<simple>${header.CamelGeneratedKeysRows.get(0).get('GENERATED_KEY')}</simple>
+			</setHeader>
+			<setBody>
+				<simple>
+					INSERT INTO ACCOUNTS (customerid, amount) VALUE (${header.NewCustomerId}, 0)
+				</simple>
+			</setBody>
+			<log message="SQL: ${body}"/>
+			<to uri="jdbc:mysqlDatasource"/>
+			<setBody>
+				<simple>${header.NewCustomerId}</simple>
+			</setBody>
+		</route>
 
-        <route id="transferMoney">
-            <from uri="jetty://{{base.rest.url}}{{transferMoney.uri}}"/>
-            <transacted ref="PROPAGATION_REQUIRED"/>
-            <convertBodyTo type="java.lang.String" charset="UTF-8"/>
-            <log message="transferMoney for ${body}"/>
-            <unmarshal ref="xmljsonTransfer"/>
-            <setHeader headerName="fromId">
-                <xpath resultType="java.lang.Integer">/transfer/fromId/number()</xpath>
-            </setHeader>
-            <setHeader headerName="toId">
-                <xpath resultType="java.lang.Integer">/transfer/toId/number()</xpath>
-            </setHeader>
-            <setHeader headerName="amount">
-                <xpath resultType="java.lang.Double">/transfer/amount/number()</xpath>
-            </setHeader>
-            <log message="${header.fromId} => ${header.toId} == ${header.amount}"/>
-            <setHeader headerName="CamelRetrieveGeneratedKeys">
-                <constant>true</constant>
-            </setHeader>
-            <setBody>
-                <simple>
-                    INSERT INTO TRANSACTIONS (fromid, toid, amount, details) VALUE (${header.fromId}, ${header.toId}, ${header.amount}, 'transfer')
-                </simple>
-            </setBody>
-            <log message="SQL: ${body}"/>
-            <to uri="jdbc:mysqlDatasource"/>
-            <setHeader headerName="NewTransactionId">
-                <simple>${header.CamelGeneratedKeysRows.get(0).get('GENERATED_KEY')}</simple>
-            </setHeader>
-            <setBody>
-                <simple>
-                    UPDATE ACCOUNTS SET amount = (amount - ${header.amount}) WHERE customerid = ${header.fromId}
-                </simple>
-            </setBody>
-            <log message="SQL: ${body}"/>
-            <to uri="jdbc:mysqlDatasource"/>
-            <setBody>
-                <simple>
-                    UPDATE ACCOUNTS SET amount = (amount + ${header.amount}) WHERE customerid = ${header.toId}
-                </simple>
-            </setBody>
-            <log message="SQL: ${body}"/>
-            <to uri="jdbc:mysqlDatasource"/>
-            <setBody>
-                <simple>${header.NewTransactionId}</simple>
-            </setBody>
-        </route>
+		<route id="depositBalance">
+			<from uri="jetty://{{base.rest.url}}{{depositBalance.uri}}"/>
+			<convertBodyTo type="java.lang.String" charset="UTF-8"/>
+			<log message="depositBalance for ${body}"/>
+			<unmarshal ref="xmljsonDeposit"/>
+			<setHeader headerName="id">
+				<xpath resultType="java.lang.Integer">/deposit/id/number()</xpath>
+			</setHeader>
+			<setHeader headerName="amount">
+				<xpath resultType="java.lang.Double">/deposit/amount/number()</xpath>
+			</setHeader>
+			<setHeader headerName="operation">
+				<xpath resultType="java.lang.String">/deposit/operation/string()</xpath>
+			</setHeader>
+			<choice>
+				<when>
+					<simple>${header.operation} == '-'</simple>
+					<setHeader headerName="textoperation">
+						<constant>debit</constant>
+					</setHeader>
+				</when>
+				<when>
+					<simple>${header.operation} == '+'</simple>
+					<setHeader headerName="textoperation">
+						<constant>credit</constant>
+					</setHeader>
+				</when>
+			</choice>
+			<log message="${header.id} == ${header.operation}${header.amount} ${header.textoperation}"/>
+			<setHeader headerName="CamelRetrieveGeneratedKeys">
+				<constant>true</constant>
+			</setHeader>
+			<setBody>
+				<simple>
+					INSERT INTO TRANSACTIONS (fromid, toid, amount, details) VALUE (-1, ${header.id}, ${header.amount},
+					'${header.textoperation}')
+				</simple>
+			</setBody>
+			<log message="SQL: ${body}"/>
+			<to uri="jdbc:mysqlDatasource"/>
+			<setHeader headerName="NewTransactionId">
+				<simple>${header.CamelGeneratedKeysRows.get(0).get('GENERATED_KEY')}</simple>
+			</setHeader>
+			<setBody>
+				<simple>
+					UPDATE ACCOUNTS SET amount = (amount ${header.operation} ${header.amount}) WHERE customerid = ${header.id}
+				</simple>
+			</setBody>
+			<log message="SQL: ${body}"/>
+			<to uri="jdbc:mysqlDatasource"/>
+			<setBody>
+				<simple>${header.NewTransactionId}</simple>
+			</setBody>
+		</route>
 
-    </camelContext>
+		<route id="transferMoney">
+			<from uri="jetty://{{base.rest.url}}{{transferMoney.uri}}"/>
+			<transacted ref="PROPAGATION_REQUIRED"/>
+			<convertBodyTo type="java.lang.String" charset="UTF-8"/>
+			<log message="transferMoney for ${body}"/>
+			<unmarshal ref="xmljsonTransfer"/>
+			<setHeader headerName="fromId">
+				<xpath resultType="java.lang.Integer">/transfer/fromId/number()</xpath>
+			</setHeader>
+			<setHeader headerName="toId">
+				<xpath resultType="java.lang.Integer">/transfer/toId/number()</xpath>
+			</setHeader>
+			<setHeader headerName="amount">
+				<xpath resultType="java.lang.Double">/transfer/amount/number()</xpath>
+			</setHeader>
+			<log message="${header.fromId} => ${header.toId} == ${header.amount}"/>
+			<setHeader headerName="CamelRetrieveGeneratedKeys">
+				<constant>true</constant>
+			</setHeader>
+			<setBody>
+				<simple>
+					INSERT INTO TRANSACTIONS (fromid, toid, amount, details) VALUE (${header.fromId}, ${header.toId}, ${header.amount},
+					'transfer')
+				</simple>
+			</setBody>
+			<log message="SQL: ${body}"/>
+			<to uri="jdbc:mysqlDatasource"/>
+			<setHeader headerName="NewTransactionId">
+				<simple>${header.CamelGeneratedKeysRows.get(0).get('GENERATED_KEY')}</simple>
+			</setHeader>
+			<setBody>
+				<simple>
+					UPDATE ACCOUNTS SET amount = (amount - ${header.amount}) WHERE customerid = ${header.fromId}
+				</simple>
+			</setBody>
+			<log message="SQL: ${body}"/>
+			<to uri="jdbc:mysqlDatasource"/>
+			<setBody>
+				<simple>
+					UPDATE ACCOUNTS SET amount = (amount + ${header.amount}) WHERE customerid = ${header.toId}
+				</simple>
+			</setBody>
+			<log message="SQL: ${body}"/>
+			<to uri="jdbc:mysqlDatasource"/>
+			<setBody>
+				<simple>${header.NewTransactionId}</simple>
+			</setBody>
+		</route>
+
+	</camelContext>
 
 </blueprint>
