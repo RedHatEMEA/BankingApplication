@@ -16,7 +16,10 @@ public class JsonProcessor implements Processor {
 	public void process(Exchange exchange) throws Exception {
 		Gson gson = new Gson();
 		List list = exchange.getIn().getBody(List.class);
-		String json = gson.toJson(list);
-		exchange.getOut().setBody(json);
+		if (list.size() == 1){
+			exchange.getOut().setBody(gson.toJson(list.get(0)));
+		}else{
+			exchange.getOut().setBody(gson.toJson(list));
+		}
 	}
 }
