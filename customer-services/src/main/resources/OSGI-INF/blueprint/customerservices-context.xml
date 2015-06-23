@@ -10,7 +10,7 @@
 	<cm:property-placeholder persistent-id="com.redhat.techstock.customerservices" update-strategy="reload">
 		<cm:default-properties>
 			<!-- REST -->
-			<cm:property name="base.rest.url" value="http://0.0.0.0:15001"/>
+			<cm:property name="base.rest.url" value="http://0.0.0.0:9001"/>
 			<!-- Between 15000 - 35530 in Openshift -->
 
 			<cm:property name="createCustomer.uri" value="/fuse/techstock/createcustomer"/>

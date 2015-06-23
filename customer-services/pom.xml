@@ -106,7 +106,7 @@
 				<version>${fabric8-maven-plugin.version}</version>
 				<configuration>
 					<jolokiaUrl>
-						http://fuse-csterpis.rhcloud.com/jolokia
+						http://52.26.13.96:8181/jolokia
 					</jolokiaUrl>
 					<profile>customer-services</profile>
 					<features>camel-jetty camel-jdbc camel-xmljson transaction</features>
