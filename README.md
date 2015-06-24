@@ -21,8 +21,8 @@ Columns: Id, FromId, ToId, Amount, Details
 * getCustomers
 ** GET: http://localhost:9001/fuse/techstock/getcustomers
 
-* depositBalance
-** POST: http://localhost:9001/fuse/techstock/depositbalance / { "id":10, "amount":50, "operation": "-" }
+* createTransaction
+** POST: http://localhost:9001/fuse/techstock/createTransaction / { fromId:1, payee:"10-223", "amount":50, "operation": "-" }
 
 * getBalance
 ** GET: http://localhost:9001/fuse/techstock/getbalance?id=1
@@ -32,6 +32,7 @@ Columns: Id, FromId, ToId, Amount, Details
 
 * getTransactions
 ** GET: http://localhost:9001/fuse/techstock/gettransactions?id=10
+
 
 #Install into Fuse
 * mvn clean install

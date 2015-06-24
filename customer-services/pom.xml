@@ -109,7 +109,7 @@
 						http://52.26.13.96:8181/jolokia
 					</jolokiaUrl>
 					<profile>customer-services</profile>
-					<features>camel-jetty camel-jdbc camel-xmljson transaction</features>
+					<features>camel-jetty camel-jdbc transaction</features>
 					<featureRepos>
 						mvn:org.apache.camel.karaf/apache-camel/${camel-version}/xml/features
 						mvn:org.apache.cxf.karaf/apache-cxf/${cxf-version}/xml/features
@@ -119,11 +119,18 @@
 						mvn:io.fabric8/fabric8-karaf/${fabric8-version}/xml/features
 					</featureRepos>
 					<bundles>
+						mvn:org.apache.camel/camel-xmljson/${camel-version}
+						mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.commons-beanutils/1.8.3_1
+						mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.oro/2.0.8_6
+						mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.ezmorph/1.0.6_1
+						mvn:xom/xom/1.2.5
+						mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.json-lib/2.4_1
+						mvn:commons-lang/commons-lang/2.5
+						mvn:commons-collections/commons-collections/3.2.1
 						mvn:com.google.code.gson/gson/${gson.version}
 						mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.commons-dbcp/${commons-dbcp-version}
 						mvn:mysql/mysql-connector-java/${mysql-version}
-						mvn:xom/xom/1.2.5
-					    mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.commons-dbcp/${commons-dbcp-version}
+						mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.commons-dbcp/${commons-dbcp-version}
 						mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.commons-pool/1.5.4_4
 					</bundles>
 				</configuration>
