@@ -112,7 +112,7 @@
 			<log message="getTransactions for ${header.id}"/>
 			<setBody>
 				<simple>
-					SELECT * FROM TRANSACTIONS WHERE (fromId = ${header.id} || payee = ${header.id})
+					SELECT * FROM TRANSACTIONS WHERE (fromId = ${header.id} || toId = ${header.id})
 				</simple>
 			</setBody>
 			<log message="getTransactions: SQL: ${body}"/>
@@ -244,7 +244,7 @@
 			</setHeader>
 			<setBody>
 				<simple>
-					INSERT INTO TRANSACTIONS (fromid, payee, amount, details) VALUE (${header.fromId}, ${header.toId}, ${header.amount},
+					INSERT INTO TRANSACTIONS (fromid, toId, amount, details) VALUE (${header.fromId}, ${header.toId}, ${header.amount},
 					'transfer')
 				</simple>
 			</setBody>
