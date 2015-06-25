@@ -140,7 +140,7 @@
 			<log message="getTransactions for ${header.id}"/>
 			<setBody>
 				<simple>
-					SELECT * FROM TRANSACTIONS WHERE (fromId = ${header.id} || toId = ${header.id})
+					SELECT * FROM TRANSACTIONS WHERE (fromId = ${header.id} || toId = ${header.id}) ORDER BY txdate DESC
 				</simple>
 			</setBody>
 			<log message="getTransactions: SQL: ${body}"/>
