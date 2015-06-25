@@ -80,6 +80,15 @@
 			<log message="SQL: ${body}"/>
 			<to uri="jdbc:mysqlDatasource"/>
 			<process ref="jsonProcessor"/>
+			<onException>
+				<exception>java.lang.Exception</exception>
+				<handled>
+					<constant>true</constant>
+				</handled>
+				<setBody>
+					<constant>-1</constant>
+				</setBody>
+			</onException>
 		</route>
 
 		<route id="getCustomers">
@@ -93,6 +102,15 @@
 			<log message="SQL: ${body}"/>
 			<to uri="jdbc:mysqlDatasource"/>
 			<process ref="jsonProcessor"/>
+			<onException>
+				<exception>java.lang.Exception</exception>
+				<handled>
+					<constant>true</constant>
+				</handled>
+				<setBody>
+					<constant>-1</constant>
+				</setBody>
+			</onException>
 		</route>
 
 		<route id="getBalance">
@@ -106,6 +124,15 @@
 			<log message="SQL: ${body}"/>
 			<to uri="jdbc:mysqlDatasource"/>
 			<process ref="jsonProcessor"/>
+			<onException>
+				<exception>java.lang.Exception</exception>
+				<handled>
+					<constant>true</constant>
+				</handled>
+				<setBody>
+					<constant>-1</constant>
+				</setBody>
+			</onException>
 		</route>
 
 		<route id="getTransactions">
@@ -119,6 +146,15 @@
 			<log message="getTransactions: SQL: ${body}"/>
 			<to uri="jdbc:mysqlDatasource"/>
 			<process ref="jsonProcessor"/>
+			<onException>
+				<exception>java.lang.Exception</exception>
+				<handled>
+					<constant>true</constant>
+				</handled>
+				<setBody>
+					<constant>-1</constant>
+				</setBody>
+			</onException>
 		</route>
 
 		<route id="createCustomer">
@@ -183,7 +219,7 @@
 			<setHeader headerName="amount">
 				<xpath resultType="java.lang.Double">/deposit/amount</xpath>
 			</setHeader>
-			<log message="CreateTransaction: ${header.id} == ${header.amount} ${header.payee}"/>
+			<log message="WithdrawMoney: ${header.id} == ${header.amount} ${header.payee}"/>
 			<setHeader headerName="CamelRetrieveGeneratedKeys">
 				<constant>true</constant>
 			</setHeader>
@@ -208,6 +244,15 @@
 			<setBody>
 				<simple>${header.NewTransactionId}</simple>
 			</setBody>
+			<onException>
+				<exception>java.lang.Exception</exception>
+				<handled>
+					<constant>true</constant>
+				</handled>
+				<setBody>
+					<constant>-1</constant>
+				</setBody>
+			</onException>
 		</route>
 
 		<route id="depositMoney">
@@ -227,7 +272,7 @@
 			<setHeader headerName="amount">
 				<xpath resultType="java.lang.Double">/deposit/amount</xpath>
 			</setHeader>
-			<log message="CreateTransaction: ${header.id} == ${header.amount} ${header.payee}"/>
+			<log message="DepositMoney: ${header.id} == ${header.amount} ${header.payee}"/>
 			<setHeader headerName="CamelRetrieveGeneratedKeys">
 				<constant>true</constant>
 			</setHeader>
@@ -252,6 +297,15 @@
 			<setBody>
 				<simple>${header.NewTransactionId}</simple>
 			</setBody>
+			<onException>
+				<exception>java.lang.Exception</exception>
+				<handled>
+					<constant>true</constant>
+				</handled>
+				<setBody>
+					<constant>-1</constant>
+				</setBody>
+			</onException>
 		</route>
 
 		<route id="transferMoney">
@@ -269,6 +323,9 @@
 			<setHeader headerName="amount">
 				<xpath resultType="java.lang.Double">/transfer/amount</xpath>
 			</setHeader>
+			<setHeader headerName="payee">
+				<xpath resultType="java.lang.String">/transfer/payee</xpath>
+			</setHeader>
 			<log message="transferMoney: ${header.fromId} => ${header.toId} == ${header.amount}"/>
 			<setHeader headerName="CamelRetrieveGeneratedKeys">
 				<constant>true</constant>
@@ -276,7 +333,7 @@
 			<setBody>
 				<simple>
 					INSERT INTO TRANSACTIONS (fromid, toId, amount, details) VALUE (${header.fromId}, ${header.toId}, ${header.amount},
-					'transfer')
+					'Transfer')
 				</simple>
 			</setBody>
 			<log message="SQL: ${body}"/>
@@ -301,6 +358,15 @@
 			<setBody>
 				<simple>${header.NewTransactionId}</simple>
 			</setBody>
+			<onException>
+				<exception>java.lang.Exception</exception>
+				<handled>
+					<constant>true</constant>
+				</handled>
+				<setBody>
+					<constant>-1</constant>
+				</setBody>
+			</onException>
 		</route>
 
 	</camelContext>
