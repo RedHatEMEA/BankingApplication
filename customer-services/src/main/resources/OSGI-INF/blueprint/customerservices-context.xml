@@ -15,7 +15,8 @@
 			<cm:property name="createCustomer.uri" value="/fuse/techstock/createcustomer"/>
 			<cm:property name="getCustomer.uri" value="/fuse/techstock/getcustomer"/>
 			<cm:property name="getCustomers.uri" value="/fuse/techstock/getcustomers"/>
-			<cm:property name="createTransaction.uri" value="/fuse/techstock/createTransaction"/>
+			<cm:property name="depositMoney.uri" value="/fuse/techstock/depositmoney"/>
+			<cm:property name="withdrawMoney.uri" value="/fuse/techstock/withdrawmoney"/>
 			<cm:property name="getBalance.uri" value="/fuse/techstock/getbalance"/>
 			<cm:property name="transferMoney.uri" value="/fuse/techstock/transfermoney"/>
 			<cm:property name="getTransactions.uri" value="/fuse/techstock/gettransactions"/>
@@ -165,13 +166,16 @@
 			</setBody>
 		</route>
 
-		<route id="createTransaction">
-			<from uri="jetty://{{base.rest.url}}{{createTransaction.uri}}"/>
+		<route id="withdrawMoney">
+			<from uri="jetty://{{base.rest.url}}{{withdrawMoney.uri}}"/>
 			<convertBodyTo type="java.lang.String" charset="UTF-8"/>
 			<log message="depositBalance for ${body}"/>
 			<unmarshal ref="xmljsonDeposit"/>
 			<setHeader headerName="fromId">
 				<xpath resultType="java.lang.String">/deposit/fromId</xpath>
+			</setHeader>
+			<setHeader headerName="toId">
+				<xpath resultType="java.lang.String">/deposit/toId</xpath>
 			</setHeader>
 			<setHeader headerName="payee">
 				<xpath resultType="java.lang.String">/deposit/payee</xpath>
@@ -179,31 +183,14 @@
 			<setHeader headerName="amount">
 				<xpath resultType="java.lang.Double">/deposit/amount</xpath>
 			</setHeader>
-			<setHeader headerName="operation">
-				<xpath resultType="java.lang.String">/deposit/operation</xpath>
-			</setHeader>
-			<choice>
-				<when>
-					<simple>${header.operation} == '-'</simple>
-					<setHeader headerName="textoperation">
-						<constant>Withdrawal</constant>
-					</setHeader>
-				</when>
-				<when>
-					<simple>${header.operation} == '+'</simple>
-					<setHeader headerName="textoperation">
-						<constant>Deposit</constant>
-					</setHeader>
-				</when>
-			</choice>
-			<log message="CreateTransaction: ${header.id} == ${header.operation}${header.amount} ${header.textoperation}"/>
+			<log message="CreateTransaction: ${header.id} == ${header.amount} ${header.payee}"/>
 			<setHeader headerName="CamelRetrieveGeneratedKeys">
 				<constant>true</constant>
 			</setHeader>
 			<setBody>
 				<simple>
-					INSERT INTO TRANSACTIONS (fromid, payee, amount, details) VALUE (${header.fromId}, ${header.payee}, ${header.amount},
-					'${header.textoperation}')
+					INSERT INTO TRANSACTIONS (fromid, toid, payee, amount, details) VALUE (${header.fromId}, ${header.toId}, '${header.payee}', ${header.amount},
+					'Withdrawal')
 				</simple>
 			</setBody>
 			<log message="SQL: ${body}"/>
@@ -213,7 +200,51 @@
 			</setHeader>
 			<setBody>
 				<simple>
-					UPDATE ACCOUNTS SET amount = (amount ${header.operation} ${header.amount}) WHERE customerid = ${header.id}
+					UPDATE ACCOUNTS SET amount = (amount - ${header.amount}) WHERE customerid = ${header.fromId}
+				</simple>
+			</setBody>
+			<log message="SQL: ${body}"/>
+			<to uri="jdbc:mysqlDatasource"/>
+			<setBody>
+				<simple>${header.NewTransactionId}</simple>
+			</setBody>
+		</route>
+
+		<route id="depositMoney">
+			<from uri="jetty://{{base.rest.url}}{{depositMoney.uri}}"/>
+			<convertBodyTo type="java.lang.String" charset="UTF-8"/>
+			<log message="depositBalance for ${body}"/>
+			<unmarshal ref="xmljsonDeposit"/>
+			<setHeader headerName="fromId">
+				<xpath resultType="java.lang.String">/deposit/fromId</xpath>
+			</setHeader>
+			<setHeader headerName="toId">
+				<xpath resultType="java.lang.String">/deposit/toId</xpath>
+			</setHeader>
+			<setHeader headerName="payee">
+				<xpath resultType="java.lang.String">/deposit/payee</xpath>
+			</setHeader>
+			<setHeader headerName="amount">
+				<xpath resultType="java.lang.Double">/deposit/amount</xpath>
+			</setHeader>
+			<log message="CreateTransaction: ${header.id} == ${header.amount} ${header.payee}"/>
+			<setHeader headerName="CamelRetrieveGeneratedKeys">
+				<constant>true</constant>
+			</setHeader>
+			<setBody>
+				<simple>
+					INSERT INTO TRANSACTIONS (fromid, toid, payee, amount, details) VALUE (${header.fromId}, ${header.toId}, '${header.payee}', ${header.amount},
+					'Deposit')
+				</simple>
+			</setBody>
+			<log message="SQL: ${body}"/>
+			<to uri="jdbc:mysqlDatasource"/>
+			<setHeader headerName="NewTransactionId">
+				<simple>${header.CamelGeneratedKeysRows.get(0).get('GENERATED_KEY')}</simple>
+			</setHeader>
+			<setBody>
+				<simple>
+					UPDATE ACCOUNTS SET amount = (amount + ${header.amount}) WHERE customerid = ${header.toId}
 				</simple>
 			</setBody>
 			<log message="SQL: ${body}"/>
