@@ -332,8 +332,8 @@
 			</setHeader>
 			<setBody>
 				<simple>
-					INSERT INTO TRANSACTIONS (fromid, toId, amount, details) VALUE (${header.fromId}, ${header.toId}, ${header.amount},
-					'Transfer')
+					INSERT INTO TRANSACTIONS (fromid, toId, payee, amount, details) VALUE (${header.fromId}, ${header.toId},
+					'${header.payee}', ${header.amount}, 'Transfer')
 				</simple>
 			</setBody>
 			<log message="SQL: ${body}"/>
