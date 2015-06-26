@@ -14,10 +14,10 @@
 
 			<cm:property name="createCustomer.uri" value="/fuse/techstock/createcustomer"/>
 			<cm:property name="getCustomer.uri" value="/fuse/techstock/getcustomer"/>
+			<cm:property name="getCurrentBalance.uri" value="/fuse/techstock/getcurrentbalance"/>
 			<cm:property name="getCustomers.uri" value="/fuse/techstock/getcustomers"/>
 			<cm:property name="depositMoney.uri" value="/fuse/techstock/depositmoney"/>
 			<cm:property name="withdrawMoney.uri" value="/fuse/techstock/withdrawmoney"/>
-			<cm:property name="getBalance.uri" value="/fuse/techstock/getbalance"/>
 			<cm:property name="transferMoney.uri" value="/fuse/techstock/transfermoney"/>
 			<cm:property name="getTransactions.uri" value="/fuse/techstock/gettransactions"/>
 
@@ -91,12 +91,13 @@
 			</onException>
 		</route>
 
-		<route id="getCustomers">
-			<from uri="jetty://{{base.rest.url}}{{getCustomers.uri}}"/>
-			<log message="getCustomers"/>
+		<route id="getCurrentBalance">
+			<from uri="jetty://{{base.rest.url}}{{getCurrentBalance.uri}}"/>
+			<log message="getCurrentBalance for ${header.id}"/>
 			<setBody>
 				<simple>
-					SELECT * FROM CUSTOMERS
+					SELECT A.amount FROM CUSTOMERS C LEFT JOIN ACCOUNTS A ON C.id = A.customerid WHERE C.id =
+					'${header.id}'
 				</simple>
 			</setBody>
 			<log message="SQL: ${body}"/>
@@ -113,12 +114,12 @@
 			</onException>
 		</route>
 
-		<route id="getBalance">
-			<from uri="jetty://{{base.rest.url}}{{getBalance.uri}}"/>
-			<log message="getBalance for ${header.id}"/>
+		<route id="getCustomers">
+			<from uri="jetty://{{base.rest.url}}{{getCustomers.uri}}"/>
+			<log message="getCustomers"/>
 			<setBody>
 				<simple>
-					SELECT * FROM ACCOUNTS WHERE customerid = ${header.id}
+					SELECT * FROM CUSTOMERS
 				</simple>
 			</setBody>
 			<log message="SQL: ${body}"/>
